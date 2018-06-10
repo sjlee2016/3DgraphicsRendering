@@ -8,16 +8,20 @@
 #include "My_Shading.h"
 GLuint h_ShaderProgram_simple; // handle to shader program
 GLint loc_ModelViewProjectionMatrix, loc_primitive_color; // indices of uniform variables
-
 GLuint h_ShaderProgram_PS; // handles to shader programs
 
 						
 // for Phone Shading shaders
-#define NUMBER_OF_LIGHT_SUPPORTED 4 
+#define NUMBER_OF_LIGHT_SUPPORTED 2
 GLint loc_global_ambient_color;
 loc_light_Parameters loc_light[NUMBER_OF_LIGHT_SUPPORTED];
 loc_Material_Parameters loc_material;
 GLint loc_ModelViewProjectionMatrix_PS, loc_ModelViewMatrix_PS, loc_ModelViewMatrixInvTrans_PS;
+GLint loc_screen_effect, loc_screen_width = 0.125f, loc_screen_density = 1.0f;
+GLint loc_blind_effect, loc_blind_density;
+GLint loc_my_light, loc_cartoon_effect, loc_cartoon_levels; 
+float screen_density = 1.0f;
+float blind_density = 90.0f;
 
 #define LOC_POSITION 0
 #define LOC_NORMAL 1
@@ -117,7 +121,7 @@ void display(void) {
 	for (int i = 0; i < NUMBER_OF_CAMERAS; i++)
 	{
 
-		set_up_scene_lights(i);
+		//set_up_scene_lights(0);
 		display_camera(i);
 	}
 	glutSwapBuffers();
@@ -220,6 +224,15 @@ void prepare_shader_program(void) {
 	loc_ModelViewProjectionMatrix_PS = glGetUniformLocation(h_ShaderProgram_PS, "u_ModelViewProjectionMatrix");
 	loc_ModelViewMatrix_PS = glGetUniformLocation(h_ShaderProgram_PS, "u_ModelViewMatrix");
 	loc_ModelViewMatrixInvTrans_PS = glGetUniformLocation(h_ShaderProgram_PS, "u_ModelViewMatrixInvTrans");
+	loc_screen_effect = glGetUniformLocation(h_ShaderProgram_PS, "screen_effect");
+	loc_screen_width = glGetUniformLocation(h_ShaderProgram_PS, "screen_width");
+	loc_screen_density = glGetUniformLocation(h_ShaderProgram_PS, "screen_density");
+	loc_blind_effect = glGetUniformLocation(h_ShaderProgram_PS, "u_blind_effect");
+	loc_blind_density = glGetUniformLocation(h_ShaderProgram_PS, "u_blind_effect_density");
+	loc_my_light = glGetUniformLocation(h_ShaderProgram_PS, "u_my_light");
+	loc_cartoon_effect= glGetUniformLocation(h_ShaderProgram_PS, "u_cartoon_effect");
+	loc_cartoon_levels = glGetUniformLocation(h_ShaderProgram_PS, "u_cartoon_levels");
+
 
 	loc_global_ambient_color = glGetUniformLocation(h_ShaderProgram_PS, "u_global_ambient_color");
 	for (i = 0; i < NUMBER_OF_LIGHT_SUPPORTED; i++) {
@@ -242,12 +255,23 @@ void prepare_shader_program(void) {
 		sprintf(string, "u_light[%d].light_attenuation_factors", i);
 		loc_light[i].light_attenuation_factors = glGetUniformLocation(h_ShaderProgram_PS, string);
 	}
+	glUniform1i(loc_screen_effect, 0);
+	glUniform1f(loc_screen_width, 0.1f);
+	glUniform1f(loc_screen_density, 1.0f);
+
+	glUniform1i(loc_blind_effect, 0);
+	glUniform1f(loc_screen_width, 0.1f);
+	glUniform1i(loc_my_light, 0);
+	glUniform1i(loc_cartoon_effect, 0);
+	glUniform1f(loc_cartoon_levels, 3.0f);
 
 	loc_material.ambient_color = glGetUniformLocation(h_ShaderProgram_PS, "u_material.ambient_color");
 	loc_material.diffuse_color = glGetUniformLocation(h_ShaderProgram_PS, "u_material.diffuse_color");
 	loc_material.specular_color = glGetUniformLocation(h_ShaderProgram_PS, "u_material.specular_color");
 	loc_material.emissive_color = glGetUniformLocation(h_ShaderProgram_PS, "u_material.emissive_color");
 	loc_material.specular_exponent = glGetUniformLocation(h_ShaderProgram_PS, "u_material.specular_exponent");
+
+	glUseProgram(0);
 }
 
 void motion(int x, int y) {
@@ -286,29 +310,25 @@ void keyboard(unsigned char key, int x, int y) {
 	glm::mat4 temp;
 	static int flag_cull_face = 0;
 	static int flag_polygon_mode = 1;
-
+	/*
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 	glutPostRedisplay();
-	
+	*/
 	if ((key >= '0') && (key <= '0' + NUMBER_OF_LIGHT_SUPPORTED - 1)) {
 		int light_ID = (int)(key - '0');
 
 		glUseProgram(h_ShaderProgram_PS);
+		
 		light[light_ID].light_on = 1 - light[light_ID].light_on;
 		glUniform1i(loc_light[light_ID].light_on, light[light_ID].light_on);
-		glUseProgram(0);
+		glUseProgram(h_ShaderProgram_PS);
 
 		glutPostRedisplay();
 		return;
 	}
-
-	if (key == 27) { // ESC key
-		glutLeaveMainLoop(); // incur destuction callback for cleanups.
-		return;
-	}
-	switch (key) {
-	case '0':
+	/*
+		case '0':
 	case '1':
 		if (cc.left_button_status == GLUT_UP) {
 			camera[camera_selected].move_status = 0;
@@ -316,6 +336,12 @@ void keyboard(unsigned char key, int x, int y) {
 			glutPostRedisplay();
 		}
 		break;
+	*/
+	if (key == 27) { // ESC key
+		glutLeaveMainLoop(); // incur destuction callback for cleanups.
+		return;
+	}
+	switch (key) {
 	case 'w':
 		if (camera[camera_selected].fov_y >= 10.0f)
 		{
@@ -415,23 +441,12 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 
 	case 'c':
-		/*flag_cull_face = (flag_cull_face + 1) % 3;
-		switch (flag_cull_face) {
-		case 0:
-			glDisable(GL_CULL_FACE);
-			glutPostRedisplay();
-			break;
-		case 1: // cull back faces;
-			glCullFace(GL_BACK);
-			glEnable(GL_CULL_FACE);
-			glutPostRedisplay();
-			break;
-		case 2: // cull front faces;
-			glCullFace(GL_FRONT);
-			glEnable(GL_CULL_FACE);
-			glutPostRedisplay();
-			break;
-		}*/
+
+		blind_density += 1.0f;
+		glUseProgram(h_ShaderProgram_PS);
+		glUniform1f(loc_blind_density, blind_density);
+		//glUseProgram(0);
+		glutPostRedisplay();
 		break;
 	case 'p':
 		flag_polygon_mode = 1 - flag_polygon_mode;
@@ -835,6 +850,7 @@ void initialize_OpenGL(void) {
 
 void set_up_scene_lights(int cam_index) {
 	// point_light_EC: use light 0
+	/*
 	light[0].light_on = 1;
 	light[0].position[0] = 0.0f; light[0].position[1] = 10.0f; 	// point light position in EC
 	light[0].position[2] = 0.0f; light[0].position[3] = 1.0f;
@@ -847,11 +863,10 @@ void set_up_scene_lights(int cam_index) {
 
 	light[0].specular_color[0] = 0.9f; light[0].specular_color[1] = 0.9f;
 	light[0].specular_color[2] = 0.9f; light[0].specular_color[3] = 1.0f;
-
-	// spot_light_WC: use light 1
+	
 	light[1].light_on = 1;
-	light[1].position[0] = -200.0f; light[1].position[1] = 500.0f; // spot light position in WC
-	light[1].position[2] = -200.0f; light[1].position[3] = 1.0f;
+	light[1].position[0] = 0.0f; light[1].position[1] = 10.0f; // spot light position in WC
+	light[1].position[2] = 0.0f; light[1].position[3] = 1.0f;
 
 	light[1].ambient_color[0] = 0.2f; light[1].ambient_color[1] = 0.2f;
 	light[1].ambient_color[2] = 0.2f; light[1].ambient_color[3] = 1.0f;
@@ -865,31 +880,74 @@ void set_up_scene_lights(int cam_index) {
 	light[1].spot_direction[0] = 0.0f; light[1].spot_direction[1] = -1.0f; // spot light direction in WC
 	light[1].spot_direction[2] = 0.0f;
 	light[1].spot_cutoff_angle = 20.0f;
-	light[1].spot_exponent = 27.0f;
+
+	*/
+
+
+
+
+
+	light[0].light_on = 1;
+	light[0].position[0] = 0.0f; light[0].position[1] = 10.0f; // spot light position in WC
+	light[0].position[2] = 0.0f; light[0].position[3] = 1.0f;
+
+	light[0].ambient_color[0] = 0.2f; light[0].ambient_color[1] = 0.2f;
+	light[0].ambient_color[2] = 0.2f; light[0].ambient_color[3] = 1.0f;
+
+	light[0].diffuse_color[0] = 0.82f; light[0].diffuse_color[1] = 0.82f;
+	light[0].diffuse_color[2] = 0.82f; light[0].diffuse_color[3] = 1.0f;
+
+	light[0].specular_color[0] = 0.92f; light[0].specular_color[1] = 0.82f;
+	light[0].specular_color[2] = 0.82f; light[0].specular_color[3] = 1.0f;
+
+	light[0].spot_direction[0] = 0.0f; light[0].spot_direction[1] = -1.0f; // spot light direction in WC
+	light[0].spot_direction[2] = 0.0f;
+	light[0].spot_cutoff_angle = 10.0f;
+
+	light[1].light_on = 0;
+	light[1].position[0] = 0.0f; light[1].position[1] = 10.0f; 	// point light position in EC
+	light[1].position[2] = 0.0f; light[1].position[3] = 1.0f;
+
+	light[1].ambient_color[0] = 0.5f; light[1].ambient_color[1] = 0.5f;
+	light[1].ambient_color[2] = 0.5f; light[1].ambient_color[3] = 1.0f;
+
+	light[1].diffuse_color[0] = 0.7f; light[1].diffuse_color[1] = 0.7f;
+	light[1].diffuse_color[2] = 0.7f; light[1].diffuse_color[3] = 1.0f;
+
+	light[1].specular_color[0] = 0.9f; light[1].specular_color[1] = 0.9f;
+	light[1].specular_color[2] = 0.9f; light[1].specular_color[3] = 1.0f;
+
 
 	glUseProgram(h_ShaderProgram_PS);
-	glUniform1i(loc_light[0].light_on, light[0].light_on);
+	/*glUniform1i(loc_light[0].light_on, light[0].light_on);
 	glUniform4fv(loc_light[0].position, 1, light[0].position);
 	glUniform4fv(loc_light[0].ambient_color, 1, light[0].ambient_color);
 	glUniform4fv(loc_light[0].diffuse_color, 1, light[0].diffuse_color);
 	glUniform4fv(loc_light[0].specular_color, 1, light[0].specular_color);
+	*/
+	glUniform1i(loc_light[0].light_on, light[0].light_on);
 
 	glUniform1i(loc_light[1].light_on, light[1].light_on);
 	// need to supply position in EC for shading
-	glm::vec4 position_EC = ViewMatrix[cam_index] * glm::vec4(light[1].position[0], light[1].position[1],
-		light[1].position[2], light[1].position[3]);
-	glUniform4fv(loc_light[1].position, 1, &position_EC[0]);
-	glUniform4fv(loc_light[1].ambient_color, 1, light[1].ambient_color);
-	glUniform4fv(loc_light[1].diffuse_color, 1, light[1].diffuse_color);
-	glUniform4fv(loc_light[1].specular_color, 1, light[1].specular_color);
+	glm::vec4 position_EC = ViewMatrix[cam_index] * glm::vec4(light[0].position[0], light[0].position[1],
+		light[0].position[2], light[0].position[3]);
+	glUniform4fv(loc_light[0].position, 1, &position_EC[0]);
+	glUniform4fv(loc_light[0].ambient_color, 1, light[0].ambient_color);
+	glUniform4fv(loc_light[0].diffuse_color, 1, light[0].diffuse_color);
+	glUniform4fv(loc_light[0].specular_color, 1, light[0].specular_color);
 	// need to supply direction in EC for shading in this example shader
 	// note that the viewing transform is a rigid body transform
 	// thus transpose(inverse(mat3(ViewMatrix)) = mat3(ViewMatrix)
-	glm::vec3 direction_EC = glm::mat3(ViewMatrix[cam_index]) * glm::vec3(light[1].spot_direction[0], light[1].spot_direction[1],
-		light[1].spot_direction[2]);
-	glUniform3fv(loc_light[1].spot_direction, 1, &direction_EC[0]);
-	glUniform1f(loc_light[1].spot_cutoff_angle, light[1].spot_cutoff_angle);
-	glUniform1f(loc_light[1].spot_exponent, light[1].spot_exponent);
+	glm::vec4 direction_EC = ViewMatrix[cam_index] * glm::vec4(light[1].position[0], light[1].position[1],
+		light[1].position[2], light[1].position[3]);
+
+	glUniform1i(loc_light[1].light_on, light[1].light_on);
+	glUniform4fv(loc_light[1].position, 1, &direction_EC[0]);
+	glUniform4fv(loc_light[1].ambient_color, 1, light[1].ambient_color);
+	glUniform4fv(loc_light[1].diffuse_color, 1, light[1].diffuse_color);
+	glUniform4fv(loc_light[1].specular_color, 1, light[1].specular_color);
+;
+
 	glUseProgram(h_ShaderProgram_simple);
 }
 
@@ -900,7 +958,7 @@ void prepare_scene(void) {
 	define_animated_teapot();
 	define_animated_car();
 	define_view_volume();
-	//set_up_scene_lights();
+	set_up_scene_lights(0);
 }
 
 void initialize_renderer(void) {

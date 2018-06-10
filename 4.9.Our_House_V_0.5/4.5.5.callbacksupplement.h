@@ -43,6 +43,7 @@ void display_camera(int cam_index) {
 	set_material_teapot();
 	draw_animated_teapot(cam_index);
 
+
 	set_material_object(&(static_objects[OBJ_COW]), 1);
 	draw_static_object(&(static_objects[OBJ_COW]), 1, cam_index);
 	set_material_object(&(static_objects[OBJ_TABLE]), 0);
