@@ -868,37 +868,83 @@ struct {
 } tiger_data;
 void define_animated_tiger(void) {
 
-	
-	for (int i = 0; i < N_TIGER_FRAMES; i++) {
-		sprintf(tiger[i].filename, "Data/Tiger_%d%d_triangles_vnt.geom", i / 10, i % 10);
 
-		tiger[i].n_fields = 8;
-		tiger[i].front_face_mode = GL_CW;
-		prepare_geom_of_static_object(&(tiger[i]));
+	int i, n_bytes_per_vertex, n_bytes_per_triangle, tiger_n_total_triangles = 0;
+	char filename[512];
 
-		tiger[i].n_geom_instances = 1;
+	n_bytes_per_vertex = 8 * sizeof(float); // 3 for vertex, 3 for normal, and 2 for texcoord
+	n_bytes_per_triangle = 3 * n_bytes_per_vertex;
 
+	for (i = 0; i < N_TIGER_FRAMES; i++) {
+		sprintf(filename, "Data/Tiger_%d%d_triangles_vnt.geom", i / 10, i % 10);
+		tiger_n_triangles[i] = read_geometry(&tiger_vertices[i], n_bytes_per_triangle, filename);
+		// assume all geometry files are effective
 		tiger[i].ModelMatrix[0] = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
-		tiger[i].material[0].emission = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-		tiger[i].material[0].ambient = glm::vec4(0.329412f, 0.223529f, 0.027451f, 1.0f);
-		tiger[i].material[0].diffuse = glm::vec4(0.780392f, 0.568627f, 0.113725f, 1.0f);
-		tiger[i].material[0].specular = glm::vec4(0.992157f, 0.941176f, 0.807843f, 1.0f);
-		tiger[i].material[0].exponent = 128.0f*0.21794872f;
+
+		tiger_n_total_triangles += tiger_n_triangles[i];
+
+		if (i == 0)
+			tiger_vertex_offset[i] = 0;
+		else
+			tiger_vertex_offset[i] = tiger_vertex_offset[i - 1] + 3 * tiger_n_triangles[i - 1];
 	}
+
+	// initialize vertex buffer object
+	glGenBuffers(1, &tiger_VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, tiger_VBO);
+	glBufferData(GL_ARRAY_BUFFER, tiger_n_total_triangles*n_bytes_per_triangle, NULL, GL_STATIC_DRAW);
+
+	for (i = 0; i < N_TIGER_FRAMES; i++)
+		glBufferSubData(GL_ARRAY_BUFFER, tiger_vertex_offset[i] * n_bytes_per_vertex,
+			tiger_n_triangles[i] * n_bytes_per_triangle, tiger_vertices[i]);
+
+	// as the geometry data exists now in graphics memory, ...
+	for (i = 0; i < N_TIGER_FRAMES; i++)
+		free(tiger_vertices[i]);
+
+	// initialize vertex array object
+	glGenVertexArrays(1, &tiger_VAO);
+	glBindVertexArray(tiger_VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, tiger_VBO);
+	glVertexAttribPointer(LOC_POSITION, 3, GL_FLOAT, GL_FALSE, n_bytes_per_vertex, BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, n_bytes_per_vertex, BUFFER_OFFSET(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	material_tiger.ambient_color[0] = 0.24725f;
+	material_tiger.ambient_color[1] = 0.1995f;
+	material_tiger.ambient_color[2] = 0.0745f;
+	material_tiger.ambient_color[3] = 1.0f;
+
+	material_tiger.diffuse_color[0] = 0.75164f;
+	material_tiger.diffuse_color[1] = 0.60648f;
+	material_tiger.diffuse_color[2] = 0.22648f;
+	material_tiger.diffuse_color[3] = 1.0f;
+
+	material_tiger.specular_color[0] = 0.628281f;
+	material_tiger.specular_color[1] = 0.555802f;
+	material_tiger.specular_color[2] = 0.366065f;
+	material_tiger.specular_color[3] = 1.0f;
+
+	material_tiger.specular_exponent = 51.2f;
+
+	material_tiger.emissive_color[0] = 0.1f;
+	material_tiger.emissive_color[1] = 0.1f;
+	material_tiger.emissive_color[2] = 0.0f;
+	material_tiger.emissive_color[3] = 1.0f;
 }
 void set_material_tiger(void)
 {
-
-	glUniform4f(loc_material.ambient_color, tiger[0].material[0].ambient.x, tiger[0].material[0].ambient.y, tiger[0].material[0].ambient.z, tiger[0].material[0].ambient.w);
-
-	glUniform4f(loc_material.diffuse_color, tiger[0].material[0].diffuse.x, tiger[0].material[0].diffuse.y, tiger[0].material[0].diffuse.z, tiger[0].material[0].diffuse.w);
-
-	glUniform4f(loc_material.emissive_color, tiger[0].material[0].emission.x, tiger[0].material[0].emission.y, tiger[0].material[0].emission.z, tiger[0].material[0].emission.w);
-
-	glUniform4f(loc_material.ambient_color, tiger[0].material[0].specular.x, tiger[0].material[0].specular.y, tiger[0].material[0].specular.z, tiger[0].material[0].specular.w);
-
-	glUniform1f(loc_material.specular_exponent, tiger[0].material[0].exponent);
-
+	glUniform4fv(loc_material.ambient_color, 1, material_tiger.ambient_color);
+	glUniform4fv(loc_material.diffuse_color, 1, material_tiger.diffuse_color);
+	glUniform4fv(loc_material.specular_color, 1, material_tiger.specular_color);
+	glUniform1f(loc_material.specular_exponent, material_tiger.specular_exponent);
+	glUniform4fv(loc_material.emissive_color, 1, material_tiger.emissive_color);
 }
 void define_animated_car(void)
 {
@@ -1043,6 +1089,14 @@ void draw_car_dummy(int cam_index) {
 	glUniformMatrix4fv(loc_ModelViewMatrix_PS, 1, GL_FALSE, &ModelViewMatrix[0][0]);
 	glUniformMatrix3fv(loc_ModelViewMatrixInvTrans_PS, 1, GL_FALSE, &ModelViewMatrixInvTrans[0][0]);
 	draw_wheel_and_nut(cam_index);  // draw wheel 3
+}
+
+void draw_tiger(void)
+{
+	glFrontFace(GL_CW);
+	glBindVertexArray(tiger_VAO);
+	glDrawArrays(GL_TRIANGLES, tiger_vertex_offset[tiger_data.cur_frame], 3 * tiger_n_triangles[tiger_data.cur_frame]);
+	glBindVertexArray(0);
 }
 
 void draw_animated_tiger(int cam_index) {
@@ -1476,33 +1530,19 @@ void draw_animated_tiger(int cam_index) {
 
 		ModelViewMatrix *= tiger[tiger_data.cur_frame].ModelMatrix[0];
 	
-
-
 		ModelViewProjectionMatrix = ProjectionMatrix[cam_index] * ModelViewMatrix;
-		//glUniformMatrix4fv(loc_ModelViewProjectionMatrix, 1, GL_FALSE, &ModelViewProjectionMatrix[0][0]);
+	//	glUniformMatrix4fv(loc_ModelViewProjectionMatrix, 1, GL_FALSE, &ModelViewProjectionMatrix[0][0]);
 		glUniformMatrix4fv(loc_ModelViewProjectionMatrix_PS, 1.0, GL_FALSE, &ModelViewProjectionMatrix[0][0]);
 		glUniformMatrix4fv(loc_ModelViewMatrix_PS, 1, GL_FALSE, &ModelViewMatrix[0][0]);
 		glUniformMatrix3fv(loc_ModelViewMatrixInvTrans_PS, 1, GL_FALSE, &ModelViewMatrixInvTrans[0][0]);
 
-
-		//glUniform3f(loc_primitive_color, tiger[tiger_data.cur_frame].material[0].diffuse.r,
-			//tiger[tiger_data.cur_frame].material[0].diffuse.g, tiger[tiger_data.cur_frame].material[0].diffuse.b);
-			
-		glBindVertexArray(tiger[tiger_data.cur_frame].VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3 * tiger[tiger_data.cur_frame].n_triangles);
-		glBindVertexArray(0);
-
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * tiger[tiger_data.cur_frame].n_triangles, BUFFER_OFFSET(0));
-		glEnableVertexAttribArray(1);
-
-		ModelViewProjectionMatrix = glm::scale(ModelViewProjectionMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
-		
-		glUniformMatrix4fv(loc_ModelViewProjectionMatrix, 1, GL_FALSE, &ModelViewProjectionMatrix[0][0]);
-	
+		draw_tiger();
 }
 
 int initial2 = 1;
 void draw_animated_teapot(int cam_index) {
+	
+
 	
 
 	if (initial2)

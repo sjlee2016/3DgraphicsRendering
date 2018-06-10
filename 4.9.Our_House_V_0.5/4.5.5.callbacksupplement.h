@@ -17,19 +17,12 @@ void display_camera(int cam_index) {
 	}
 	//	else if (view_mode == VIEW_TIGER) set_ViewMatrix_for_tiger(8);
 
-	glUseProgram(h_ShaderProgram_simple);
-	
-	
 	//draw_view(cam_index);
 
 	
 	glUseProgram(h_ShaderProgram_PS);
-	set_material_teapot();
-	draw_animated_teapot(cam_index);
-
+	
 	//render_car(cam_index);
-	set_material_tiger();
-	draw_animated_tiger(cam_index);
 	//set_material_floor();
 	//raw_floor(cam_index);
 
@@ -47,6 +40,8 @@ void display_camera(int cam_index) {
 	draw_static_object(&(static_objects[OBJ_BUILDING]), 0, cam_index);
 	set_material_object(&(static_objects[OBJ_COW]), 0);
 	draw_static_object(&(static_objects[OBJ_COW]), 0, cam_index);
+	set_material_teapot();
+	draw_animated_teapot(cam_index);
 
 	set_material_object(&(static_objects[OBJ_COW]), 1);
 	draw_static_object(&(static_objects[OBJ_COW]), 1, cam_index);
@@ -94,6 +89,9 @@ void display_camera(int cam_index) {
 
 	set_material_object(&(static_objects[OBJ_SPIDER]), 0);
 	draw_static_object(&(static_objects[OBJ_SPIDER]), 0, cam_index);
+
+	set_material_tiger();
+	draw_animated_tiger(cam_index);
 	//	draw_static_object(&(static_objects[OBJ_COW]), 0, cam_index);
 
 

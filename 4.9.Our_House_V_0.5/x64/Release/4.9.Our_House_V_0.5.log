@@ -30,27 +30,27 @@ c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(539): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(652): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(653): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(873): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(879): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(906): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(952): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(907): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(953): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(908): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(954): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(916): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(962): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(980): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1002): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1014): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1024): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1033): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1042): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1483): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1529): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1570): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1577): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1585): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1026): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1048): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1060): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1070): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1079): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1088): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1535): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1569): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1610): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1617): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\object_definitions.h(1625): warning C4244: '인수': 'double'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\20161619_project2.cpp(226): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.17134.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\20161619_project2.cpp(228): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
@@ -74,8 +74,8 @@ c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\20161619_project2.cp
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\20161619_project2.cpp(335): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\lee se jin\desktop\hw2_s161619\4.9.our_house_v_0.5\20161619_project2.cpp(951): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
   코드를 생성하고 있습니다.
-  1 of 142 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+  1 of 143 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   4.9.Our_House_V_0.5.vcxproj -> C:\Users\lee se jin\Desktop\HW2_S161619\x64\Release\4.9.Our_House_V_0.5.exe
